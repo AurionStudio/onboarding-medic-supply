@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Onboarding — Medic Supply × Aurion Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Montserrat:wght@300;400;600;700&family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════
+   DESIGN TOKENS
+════════════════════════════════════════════════════════════ */
+:root {
+  --bg:         #040608;
+  --bg2:        #060A10;
+  --surface:    rgba(255,255,255,.025);
+  --surface-h:  rgba(255,255,255,.044);
+  --border:     rgba(255,255,255,.055);
+  --border-h:   rgba(58,166,255,.28);
+
+  /* Aurora palette — extracted from the actual logo */
+  --teal:       #14F1D9;
+  --blue:       #3AA6FF;
+  --violet:     #8B5CF6;
+  --pink:       #EC4899;
+  --white:      #EAF1F8;
+  --muted:      #4E6080;
+  --text:       #B8C5DC;
+
+  --grad:       linear-gradient(135deg,#14F1D9,#3AA6FF,#8B5CF6,#EC4899);
+  --grad-ui:    linear-gradient(100deg,#14F1D9 0%,#3AA6FF 50%,#8B5CF6 100%);
+
+  --danger:     #FF5A5A;
+  --warn:       #FFB547;
+  --green:      #36D399;
+
+  --radius:     16px;
+  --radius-sm:  9px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.8;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--grad); border-radius: 3px; }
+
+/* ── Gradient text helper (prevents clip bugs) ── */
+.gt {
+  display: inline-block;
+  padding: .06em .04em;
+  margin: -.06em -.04em;
+  background: var(--grad-ui);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.3;
+}
+
+/* ════════════════════════════════════════════════════════════
+   READING PROGRESS BAR
+════════════════════════════════════════════════════════════ */
+#progress-bar {
+  position: fixed; top: 0; left: 0; height: 2px; z-index: 200;
+  background: var(--grad); width: 0%;
+  box-shadow: 0 0 14px rgba(20,241,217,.55), 0 0 28px rgba(139,92,246,.3);
+  transition: width .1s linear;
+}
+
+/* ════════════════════════════════════════════════════════════
+   BACKGROUND ATMOSPHERE
+════════════════════════════════════════════════════════════ */
+#bg-canvas {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+}
+.orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(140px); opacity: 0;
+  animation: drift 24s ease-in-out infinite;
+}
+.orb-1 { width: 800px; height: 800px; top: -20%; left: -15%;
+  background: radial-gradient(circle, rgba(20,241,217,.09), transparent 70%);
+  animation-duration: 24s; animation-delay: 0s; }
+.orb-2 { width: 650px; height: 650px; top: 35%; right: -14%;
+  background: radial-gradient(circle, rgba(139,92,246,.08), transparent 70%);
+  animation-duration: 28s; animation-delay: -9s; }
+.orb-3 { width: 550px; height: 550px; bottom: 5%; left: 25%;
+  background: radial-gradient(circle, rgba(58,166,255,.07), transparent 70%);
+  animation-duration: 20s; animation-delay: -16s; }
+@keyframes drift {
+  0%   { opacity: 0; transform: translate(0, 0) scale(1); }
+  8%   { opacity: 1; }
+  50%  { transform: translate(50px, -70px) scale(1.1); }
+  92%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(0, 0) scale(1); }
+}
+
+/* film grain */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+  opacity: .45;
+}
+
+/* ════════════════════════════════════════════════════════════
+   CURSOR GLOW
+════════════════════════════════════════════════════════════ */
+#cursor-glow {
+  position: fixed; width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(58,166,255,.045), transparent 70%);
+  pointer-events: none; z-index: 1;
+  transform: translate(-50%, -50%);
+  will-change: left, top;
+}
+
+/* ════════════════════════════════════════════════════════════
+   NAV
+════════════════════════════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 44px;
+  background: rgba(4,6,8,.6);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  transition: padding .35s ease, background .35s ease;
+}
+nav.scrolled { padding: 14px 44px; background: rgba(4,6,8,.82); }
+
+.nav-logo { display: flex; align-items: center; height: 29px; }
+.nav-logo svg { height: 29px; width: auto; display: block; overflow: visible; }
+
+.nav-badge {
+  font-family: 'Syne', sans-serif;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 5px 14px; border-radius: 20px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   WRAPPER
+════════════════════════════════════════════════════════════ */
+.wrapper {
+  position: relative; z-index: 2;
+  max-width: 920px; margin: 0 auto;
+  padding: 0 36px 120px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   HERO / HEADER
+════════════════════════════════════════════════════════════ */
+header {
+  padding: 118px 0 80px;
+  text-align: center;
+}
+
+.hero-logo {
+  display: flex; justify-content: center;
+  margin-bottom: 44px;
+}
+.hero-logo svg {
+  width: 220px; height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 0 40px rgba(20,241,217,.18)) drop-shadow(0 0 80px rgba(139,92,246,.12));
+}
+
+.hero-rule {
+  width: 120px; height: 1px; margin: 0 auto 36px;
+  background: linear-gradient(90deg, transparent, rgba(58,166,255,.4), transparent);
+}
+
+.doc-type {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: 'Syne', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase;
+  color: rgba(58,166,255,.8);
+  padding: 7px 18px;
+  border: 1px solid rgba(58,166,255,.2);
+  border-radius: 20px;
+  background: rgba(58,166,255,.05);
+  margin-bottom: 28px;
+}
+.doc-type::before {
+  content: '';
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 8px var(--teal);
+  animation: pulse 2.4s ease infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(46px, 8vw, 84px);
+  line-height: 1.15;
+  letter-spacing: .005em;
+  color: var(--white);
+  margin-bottom: 28px;
+}
+h1 .grad-word {
+  font-style: italic;
+  font-weight: 400;
+  display: inline-block;
+  padding: .06em .05em;
+  margin: -.06em -.05em;
+  background: var(--grad-ui);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.header-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  color: var(--text);
+  max-width: 560px; margin: 0 auto 40px;
+  font-size: 15.5px; line-height: 1.85;
+}
+
+.header-tags {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  justify-content: center;
+  margin-bottom: 0;
+}
+.header-tag {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 300; color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 16px; border-radius: 20px;
+}
+.header-tag::before {
+  content: '';
+  width: 4px; height: 4px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), var(--blue));
+  flex-shrink: 0;
+}
+
+.hero-divider {
+  height: 1px; margin-top: 64px;
+  background: linear-gradient(90deg, transparent, rgba(58,166,255,.22), rgba(139,92,246,.22), transparent);
+}
+
+/* ════════════════════════════════════════════════════════════
+   SECTION LABELS
+════════════════════════════════════════════════════════════ */
+.section-label {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 32px; margin-top: 88px;
+}
+.section-num {
+  display: inline-flex; align-items: center;
+  background: rgba(58,166,255,.06);
+  border: 1px solid rgba(58,166,255,.22);
+  border-radius: 20px; padding: 5px 14px;
+  flex-shrink: 0;
+}
+.section-num span {
+  font-family: 'Syne', sans-serif;
+  font-size: 9px; font-weight: 800; letter-spacing: .22em;
+  display: inline-block;
+  background: var(--grad-ui);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.4;
+}
+.section-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, rgba(58,166,255,.2), transparent);
+}
+h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--white); letter-spacing: -.015em;
+}
+
+/* ════════════════════════════════════════════════════════════
+   GLASS BASE
+════════════════════════════════════════════════════════════ */
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: border-color .35s, background .35s, transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s;
+}
+.glass:hover {
+  border-color: var(--border-h);
+  background: var(--surface-h);
+  transform: translateY(-3px);
+  box-shadow: 0 24px 64px rgba(0,0,0,.45), 0 0 40px rgba(20,241,217,.06);
+}
+
+/* ════════════════════════════════════════════════════════════
+   INTRO CARD
+════════════════════════════════════════════════════════════ */
+.intro-card {
+  padding: 32px 38px; margin-top: 8px;
+  position: relative; overflow: hidden;
+}
+.intro-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; bottom: 0; width: 2px;
+  background: var(--grad);
+}
+.intro-card::after {
+  content: '';
+  position: absolute; top: -60%; right: -8%; width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(139,92,246,.05), transparent 70%);
+  pointer-events: none;
+}
+.intro-card p { color: var(--text); font-size: 15px; margin-bottom: 14px; position: relative; z-index: 1; }
+.intro-card p:last-child { margin-bottom: 0; }
+.intro-card strong { color: var(--white); font-weight: 500; }
+
+/* ════════════════════════════════════════════════════════════
+   ACCESS GROUPS & CARDS
+════════════════════════════════════════════════════════════ */
+.access-group { margin-bottom: 52px; }
+.access-group-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 9px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 14px; padding-bottom: 12px;
+  display: flex; align-items: center; gap: 12px;
+}
+.access-group-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.access-cards { display: flex; flex-direction: column; gap: 10px; }
+
+.access-card {
+  display: flex; flex-direction: column;
+  padding: 18px 24px; cursor: default;
+}
+.card-main {
+  display: grid;
+  grid-template-columns: 46px 1fr auto;
+  align-items: center; gap: 18px;
+}
+.card-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+.access-icon {
+  width: 46px; height: 46px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px; flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+.access-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 13.5px; font-weight: 700; color: var(--white); margin-bottom: 3px;
+}
+.access-detail { font-size: 11.5px; color: var(--muted); line-height: 1.55; }
+.access-detail code {
+  background: rgba(58,166,255,.08); border: 1px solid rgba(58,166,255,.18);
+  padding: 1px 7px; border-radius: 4px;
+  font-family: 'DM Mono','Courier New',monospace;
+  font-size: 10.5px; color: #98BEFF;
+}
+
+.access-status {
+  display: flex; align-items: center; gap: 6px;
+  font-family: 'Syne', sans-serif;
+  font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  flex-shrink: 0; padding: 5px 12px; border-radius: 20px; white-space: nowrap;
+}
+.status-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; animation: pulse 2.4s ease infinite; }
+.status-required { background: rgba(255,90,90,.07); color: var(--danger); border: 1px solid rgba(255,90,90,.18); }
+.status-pending   { background: rgba(255,181,71,.07); color: var(--warn);   border: 1px solid rgba(255,181,71,.18); }
+.status-done      { background: rgba(54,211,153,.07); color: var(--green);  border: 1px solid rgba(54,211,153,.18); }
+
+.access-card.cred-filled { border-color: rgba(54,211,153,.2) !important; }
+.access-card.cred-filled .access-icon { box-shadow: 0 0 0 1px rgba(54,211,153,.12); }
+
+/* ── Credential toggle button ── */
+.cred-toggle-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); padding: 6px; border-radius: 7px;
+  display: flex; align-items: center;
+  transition: color .2s, background .2s, transform .4s cubic-bezier(.16,1,.3,1);
+  flex-shrink: 0;
+}
+.cred-toggle-btn:hover { color: var(--teal); background: rgba(20,241,217,.06); }
+.cred-toggle-btn.open { transform: rotate(180deg); color: var(--teal); }
+
+/* ── Credential panel ── */
+.cred-panel { overflow: hidden; opacity: 0; transition: opacity .35s ease; }
+.cred-panel.open { opacity: 1; }
+.cred-sep {
+  height: 1px; margin: 14px 0 18px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+.cred-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+@media(max-width:520px) { .cred-row { grid-template-columns: 1fr; } }
+
+.cred-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 9px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--muted); display: block; margin-bottom: 7px;
+}
+.cred-input {
+  width: 100%;
+  background: rgba(255,255,255,.035);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--white); -webkit-text-fill-color: var(--white);
+  font-family: 'DM Sans', sans-serif; font-weight: 300;
+  font-size: 13px; padding: 10px 13px;
+  outline: none;
+  transition: border-color .25s, background .25s;
+}
+.cred-input:focus { border-color: rgba(58,166,255,.45); background: rgba(58,166,255,.05); }
+.cred-input::placeholder { color: var(--muted); opacity: .5; -webkit-text-fill-color: var(--muted); }
+.cred-pass-wrap { position: relative; }
+.cred-pass-wrap .cred-input { padding-right: 40px; }
+.cred-eye {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; color: var(--muted);
+  padding: 2px; display: flex; align-items: center;
+  transition: color .2s;
+}
+.cred-eye:hover { color: var(--teal); }
+.cred-footer { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-bottom: 4px; }
+.cred-save-btn {
+  font-family: 'Syne', sans-serif;
+  font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  background: var(--grad); color: #fff; border: none;
+  padding: 9px 22px; border-radius: 20px; cursor: pointer;
+  transition: opacity .2s, transform .2s;
+}
+.cred-save-btn:hover { opacity: .82; transform: scale(.975); }
+.cred-saved-tag {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: .06em;
+  color: var(--green); opacity: 0;
+  display: flex; align-items: center; gap: 5px;
+  transition: opacity .3s;
+}
+.cred-saved-tag.show { opacity: 1; }
+
+/* ── Access progress banner ── */
+.access-progress {
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 22px; margin-bottom: 32px;
+  border-radius: var(--radius-sm);
+}
+.progress-track { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--grad); border-radius: 2px; width: 0%; transition: width .6s cubic-bezier(.16,1,.3,1); }
+.progress-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 9px; font-weight: 700; letter-spacing: .14em; color: var(--muted); white-space: nowrap;
+}
+.progress-count {
+  display: inline-block;
+  background: var(--grad-ui);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  padding: 0 .04em;
+}
+
+/* ════════════════════════════════════════════════════════════
+   ALERT
+════════════════════════════════════════════════════════════ */
+.alert {
+  display: flex; gap: 16px; padding: 20px 26px;
+  border-radius: var(--radius); margin-top: 32px;
+}
+.alert-warn { background: rgba(255,181,71,.05); border: 1px solid rgba(255,181,71,.15); }
+.alert-icon { font-size: 18px; flex-shrink: 0; line-height: 1.7; }
+.alert-text { font-size: 13px; color: var(--text); line-height: 1.75; font-weight: 300; }
+.alert-text strong { color: var(--warn); font-weight: 500; }
+
+/* ════════════════════════════════════════════════════════════
+   CHECKLIST
+════════════════════════════════════════════════════════════ */
+.checklist { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.check-item { display: flex; align-items: flex-start; gap: 16px; padding: 18px 24px; cursor: default; }
+.check-box {
+  width: 20px; height: 20px; border-radius: 5px;
+  border: 1px solid rgba(58,166,255,.3); flex-shrink: 0; margin-top: 2px;
+  background: rgba(58,166,255,.04);
+  transition: border-color .25s, background .25s, box-shadow .25s;
+}
+.check-item:hover .check-box { border-color: var(--teal); background: rgba(20,241,217,.07); box-shadow: 0 0 12px rgba(20,241,217,.12); }
+.check-text { font-size: 14px; color: var(--text); font-weight: 300; }
+.check-text strong { color: var(--white); font-weight: 500; }
+.check-sub { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.65; font-weight: 300; }
+
+/* ════════════════════════════════════════════════════════════
+   TIMELINE
+════════════════════════════════════════════════════════════ */
+.timeline { display: flex; flex-direction: column; position: relative; padding-left: 40px; margin-top: 8px; }
+.timeline::before {
+  content: ''; position: absolute; left: 13px; top: 14px; bottom: 14px; width: 1px;
+  background: linear-gradient(180deg, var(--teal), var(--violet), transparent);
+}
+.tl-item { position: relative; padding: 0 0 52px 34px; }
+.tl-item:last-child { padding-bottom: 0; }
+.tl-dot {
+  position: absolute; left: -40px; top: 7px;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--bg2);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 0 1px rgba(20,241,217,.25);
+  transition: box-shadow .3s;
+}
+.tl-dot::before { content: ''; position: absolute; inset: -1px; border-radius: 50%; background: var(--grad); z-index: -1; }
+.tl-dot::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--grad); box-shadow: 0 0 10px var(--teal); }
+.tl-item:hover .tl-dot { box-shadow: 0 0 0 1px var(--teal), 0 0 22px rgba(20,241,217,.25); }
+
+.tl-week {
+  font-family: 'Syne', sans-serif;
+  font-size: 9px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  display: block; overflow: visible;
+  background: var(--grad-ui);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  margin-bottom: 5px; padding: .05em 0;
+}
+.tl-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 14px; letter-spacing: -.01em; }
+.tl-tasks { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.tl-task {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 13.5px; color: var(--text); font-weight: 300;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 14px;
+  transition: border-color .25s, background .25s;
+}
+.tl-task:hover { border-color: rgba(20,241,217,.18); background: rgba(20,241,217,.03); }
+.tl-task::before {
+  content: '→'; flex-shrink: 0; font-weight: 600;
+  background: var(--grad-ui);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  padding: 0 .02em;
+}
+
+/* ════════════════════════════════════════════════════════════
+   KPI GRID
+════════════════════════════════════════════════════════════ */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 13px; margin-top: 8px; }
+.kpi-card {
+  padding: 26px 22px; position: relative; overflow: visible; cursor: default;
+}
+.kpi-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--grad); border-radius: var(--radius) var(--radius) 0 0;
+  opacity: 0; transition: opacity .3s;
+}
+.kpi-card:hover::before { opacity: 1; }
+.kpi-card::after {
+  content: ''; position: absolute; bottom: -20px; right: -20px;
+  width: 130px; height: 130px; pointer-events: none;
+  background: radial-gradient(circle, rgba(139,92,246,.07), transparent 70%);
+  transition: transform .45s;
+}
+.kpi-card:hover::after { transform: scale(1.5); }
+.kpi-label { font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.kpi-value {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 300; font-size: 32px; line-height: 1.1;
+  display: block; overflow: visible; padding: .05em 0; margin-bottom: 8px;
+  background: var(--grad-ui);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.kpi-value.kpi-tbd { font-size: 26px; opacity: .85; font-style: italic; }
+.kpi-unit { font-size: 11.5px; color: var(--muted); line-height: 1.5; font-weight: 300; }
+.kpi-badge {
+  display: inline-block; margin-top: 7px;
+  font-family: 'Syne', sans-serif;
+  font-size: 8px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  background: rgba(255,181,71,.08); color: var(--warn); border: 1px solid rgba(255,181,71,.18);
+  padding: 3px 9px; border-radius: 10px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   DIVIDER
+════════════════════════════════════════════════════════════ */
+.divider {
+  height: 1px; margin: 72px 0;
+  background: linear-gradient(90deg, transparent, rgba(58,166,255,.2), rgba(139,92,246,.2), transparent);
+}
+
+/* ════════════════════════════════════════════════════════════
+   CREDENTIALS SUMMARY
+════════════════════════════════════════════════════════════ */
+.creds-summary-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 28px; cursor: pointer; user-select: none; border-radius: var(--radius);
+}
+.creds-summary-header:hover .summary-title { color: var(--teal); }
+.summary-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--white); transition: color .2s; }
+.summary-sub { font-size: 12px; color: var(--muted); margin-top: 3px; font-weight: 300; }
+.summary-count-badge { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; padding: 4px 13px; border-radius: 20px; }
+.summary-count-badge.empty   { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+.summary-count-badge.partial { background: rgba(255,181,71,.08); color: var(--warn); border: 1px solid rgba(255,181,71,.2); }
+.summary-count-badge.full    { background: rgba(54,211,153,.08); color: var(--green); border: 1px solid rgba(54,211,153,.2); }
+
+#creds-table-wrap { overflow: hidden; transition: max-height .55s cubic-bezier(.16,1,.3,1); }
+.creds-inner { padding: 0 28px 28px; }
+.creds-table { width: 100%; border-collapse: collapse; }
+.creds-table th {
+  font-family: 'Syne', sans-serif; font-size: 8.5px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--muted); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border);
+}
+.creds-table td { font-size: 12.5px; color: var(--text); font-weight: 300; padding: 11px 12px; border-bottom: 1px solid rgba(255,255,255,.03); vertical-align: middle; }
+.creds-table tr:last-child td { border-bottom: none; }
+.creds-table tr:hover td { background: rgba(255,255,255,.018); }
+.tool-name-cell { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: var(--white); }
+.cred-code { font-family: 'DM Mono','Courier New',monospace; font-size: 11px; color: #98BEFF; background: rgba(58,166,255,.09); border: 1px solid rgba(58,166,255,.18); padding: 2px 7px; border-radius: 4px; }
+.cred-pass-display { font-family: 'DM Mono','Courier New',monospace; font-size: 12px; letter-spacing: .06em; color: var(--muted); }
+.cred-reveal-btn {
+  background: none; border: 1px solid var(--border); color: var(--muted);
+  font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 10px; cursor: pointer; margin-left: 8px;
+  transition: border-color .2s, color .2s;
+}
+.cred-reveal-btn:hover { border-color: rgba(20,241,217,.35); color: var(--teal); }
+
+/* ════════════════════════════════════════════════════════════
+   PIN GATE — Painel de Acessos protegido
+════════════════════════════════════════════════════════════ */
+.pin-gate {
+  padding: 44px 28px 36px;
+  display: flex; justify-content: center;
+}
+.pin-gate-inner {
+  text-align: center; max-width: 360px; width: 100%;
+}
+.pin-lock-wrap {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 64px; height: 64px; border-radius: 50%;
+  background: rgba(58,166,255,.07);
+  border: 1px solid rgba(58,166,255,.18);
+  margin-bottom: 20px;
+}
+.pin-lock-wrap svg { color: var(--blue); }
+.pin-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px; font-weight: 700; color: var(--white);
+  margin-bottom: 8px;
+}
+.pin-sub {
+  font-size: 12.5px; color: var(--muted); font-weight: 300;
+  line-height: 1.7; margin-bottom: 28px;
+}
+.pin-row {
+  display: flex; gap: 10px; margin-bottom: 10px;
+}
+.pin-input {
+  flex: 1;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--white); -webkit-text-fill-color: var(--white);
+  font-family: 'DM Sans', sans-serif; font-weight: 300;
+  font-size: 14px; padding: 11px 14px;
+  outline: none; text-align: center; letter-spacing: .18em;
+  transition: border-color .25s, background .25s;
+}
+.pin-input:focus {
+  border-color: rgba(58,166,255,.45);
+  background: rgba(58,166,255,.05);
+}
+.pin-input::placeholder {
+  color: var(--muted); opacity: .5;
+  -webkit-text-fill-color: var(--muted);
+  letter-spacing: normal;
+}
+.pin-input.pin-wrong {
+  border-color: rgba(255,90,90,.45) !important;
+  background: rgba(255,90,90,.04) !important;
+  animation: pinShake .38s ease;
+}
+.pin-submit {
+  font-family: 'Syne', sans-serif;
+  font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  background: var(--grad); color: #fff; border: none;
+  padding: 11px 22px; border-radius: 20px; cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity .2s, transform .2s;
+}
+.pin-submit:hover { opacity: .82; transform: scale(.975); }
+.pin-error {
+  font-size: 11px; color: var(--danger); min-height: 16px;
+  font-weight: 300; transition: opacity .25s;
+}
+@keyframes pinShake {
+  0%,100%{transform:translateX(0)}
+  20%,60%{transform:translateX(-7px)}
+  40%,80%{transform:translateX(7px)}
+}
+.pin-unlocked-note {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Syne', sans-serif;
+  font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--green);
+  background: rgba(54,211,153,.07); border: 1px solid rgba(54,211,153,.18);
+  padding: 4px 12px; border-radius: 20px; margin-bottom: 16px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   CONTACT
+════════════════════════════════════════════════════════════ */
+.contact-block {
+  text-align: center; padding: 52px 36px;
+  position: relative; overflow: hidden; margin-top: 48px;
+}
+.contact-block::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(58,166,255,.05), transparent 70%); pointer-events: none;
+}
+.contact-label { font-size: 12px; color: var(--muted); margin-bottom: 14px; font-weight: 300; letter-spacing: .06em; }
+.contact-main { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 400; font-size: 22px; color: var(--white); margin-bottom: 6px; }
+.contact-main a {
+  display: inline-block;
+  background: var(--grad-ui);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  text-decoration: none; padding: 0 .04em;
+  transition: opacity .2s;
+}
+.contact-main a:hover { opacity: .75; }
+.contact-site { font-size: 11.5px; color: var(--muted); margin-top: 8px; letter-spacing: .06em; font-weight: 300; }
+
+/* ════════════════════════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════════════════════════ */
+footer {
+  margin-top: 72px; padding-top: 32px;
+  border-top: 1px solid var(--border);
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;
+}
+.footer-logo { display: flex; align-items: center; height: 22px; opacity: .5; transition: opacity .3s; }
+.footer-logo:hover { opacity: .8; }
+.footer-logo svg { height: 22px; width: auto; overflow: visible; }
+.footer-meta { font-size: 11px; color: var(--muted); text-align: right; line-height: 1.8; font-weight: 300; }
+
+/* ════════════════════════════════════════════════════════════
+   SCROLL REVEAL
+════════════════════════════════════════════════════════════ */
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════════════════════ */
+@media(max-width:640px) {
+  nav { padding: 15px 22px; }
+  nav.scrolled { padding: 12px 22px; }
+  .wrapper { padding: 0 20px 80px; }
+  header { padding: 100px 0 60px; }
+  .hero-logo svg { width: 170px; }
+  h1 { font-size: clamp(38px, 9vw, 56px); }
+  .card-main { grid-template-columns: 42px 1fr; }
+  .card-right { grid-column: 2; margin-top: 6px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  h2 { font-size: 20px; }
+  .creds-table th:nth-child(2), .creds-table td:nth-child(2) { display: none; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   SEND BLOCK
+════════════════════════════════════════════════════════════ */
+.send-block {
+  margin-top: 32px; padding: 32px 36px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 18px; text-align: center; position: relative; overflow: hidden;
+}
+.send-block::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(20,241,217,.04), transparent 70%);
+  pointer-events: none;
+}
+.send-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 6px;
+}
+.send-sub { font-size: 12.5px; color: var(--muted); font-weight: 300; line-height: 1.7; }
+.send-btn {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  background: var(--grad); color: #fff; border: none;
+  padding: 14px 40px; border-radius: 20px; cursor: pointer;
+  transition: opacity .2s, transform .2s;
+  position: relative; z-index: 1;
+}
+.send-btn:hover:not(:disabled) { opacity: .82; transform: scale(.975); }
+.send-btn:disabled { opacity: .35; cursor: not-allowed; }
+.send-status {
+  font-size: 13px; font-weight: 300; min-height: 18px;
+  color: var(--muted); transition: color .25s;
+}
+.send-status.ok  { color: var(--green); }
+.send-status.err { color: var(--danger); }
+
+/* ════════════════════════════════════════════════════════════
+   PRINT
+════════════════════════════════════════════════════════════ */
+@media print {
+  #progress-bar, #bg-canvas, #cursor-glow, nav, body::after { display: none !important; }
+  body { background: #fff; color: #000; font-weight: 400; }
+  .glass { border: 1px solid #e5e7eb; background: #fafafa; backdrop-filter: none; }
+  h1 { color: #111; }
+  h1 .grad-word, .kpi-value, .tl-week, .section-num span, .gt { -webkit-text-fill-color: #3AA6FF; color: #3AA6FF; background: none; }
+  .wrapper { padding-top: 32px; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="cursor-glow"></div>
+<div id="bg-canvas" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav id="main-nav">
+  <div class="nav-logo" aria-label="Aurion Studio">
+    <!-- Wordmark SHIFT20 — IDs prefixed nav- -->
+    <svg viewBox="0 0 2600 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aurion Studio">
+      <defs>
+        <linearGradient id="nav-aurora" x1="0%" x2="100%" y1="0%" y2="100%">
+          <stop offset="0%"   stop-color="#14F1D9"/>
+          <stop offset="35%"  stop-color="#3AA6FF"/>
+          <stop offset="70%"  stop-color="#8B5CF6"/>
+          <stop offset="100%" stop-color="#EC4899"/>
+        </linearGradient>
+        <filter id="nav-glow" height="220%" width="220%" x="-60%" y="-60%">
+          <feGaussianBlur result="b" stdDeviation="14"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <text fill="#EAF1F8" font-family="Montserrat, Inter, Helvetica, Arial, sans-serif" font-size="260" letter-spacing="2" x="160" y="600">AURI</text>
+      <circle cx="910.3" cy="457" fill="none" filter="url(#nav-glow)" r="118.3" stroke="url(#nav-aurora)" stroke-width="41.6"/>
+      <circle cx="910.3" cy="457" fill="none" r="94.9" stroke="#EAF1F8" stroke-width="23.4"/>
+      <text fill="#EAF1F8" font-family="Montserrat, Inter, Helvetica, Arial, sans-serif" font-size="260" letter-spacing="2" x="1052.6" y="600">N STUDIO</text>
+    </svg>
+  </div>
+  <span class="nav-badge">Confidencial</span>
+</nav>
+
+<div class="wrapper">
+
+  <!-- ══ HERO / HEADER ══ -->
+  <header class="reveal">
+
+    <!-- Vertical logo com aurora glow — IDs prefixed hdr- -->
+    <div class="hero-logo">
+      <svg viewBox="0 0 1600 2000" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aurion Studio — Creative Intelligence">
+        <defs>
+          <linearGradient id="hdr-aurora" x1="0%" x2="100%" y1="0%" y2="100%">
+            <stop offset="0%"   stop-color="#14F1D9"/>
+            <stop offset="35%"  stop-color="#3AA6FF"/>
+            <stop offset="70%"  stop-color="#8B5CF6"/>
+            <stop offset="100%" stop-color="#EC4899"/>
+          </linearGradient>
+          <filter id="hdr-glow" height="220%" width="220%" x="-60%" y="-60%">
+            <feGaussianBlur result="b" stdDeviation="14"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <circle cx="800" cy="560" fill="none" filter="url(#hdr-glow)" r="360" stroke="url(#hdr-aurora)" stroke-width="56"/>
+        <circle cx="800" cy="560" fill="none" r="324" stroke="#EAF1F8" stroke-width="32"/>
+        <text fill="#EAF1F8" font-family="Montserrat, Inter, Helvetica, Arial, sans-serif" font-size="340" letter-spacing="12" text-anchor="middle" x="800" y="1100">AURION</text>
+        <text fill="#EAF1F8" fill-opacity=".82" font-family="Montserrat, Inter, Helvetica, Arial, sans-serif" font-size="272" letter-spacing="12" text-anchor="middle" x="800" y="1380">STUDIO</text>
+        <text fill="#EAF1F8" font-family="Montserrat, Inter, Helvetica, Arial, sans-serif" font-size="64" letter-spacing="14" opacity=".56" text-anchor="middle" x="800" y="1580">CREATIVE INTELLIGENCE</text>
+      </svg>
+    </div>
+
+    <div class="hero-rule"></div>
+
+    <div class="doc-type">Onboarding · Tráfego Pago</div>
+
+    <h1>
+      Kit de Início &amp;<br>
+      <span class="grad-word">Hands-on</span> Operacional
+    </h1>
+
+    <p class="header-sub">
+      Tudo o que precisamos para colocar a operação de mídia paga da Medic Supply no ar — acessos, responsabilidades, cronograma e KPIs acordados.
+    </p>
+
+    <div class="header-tags">
+      <span class="header-tag">Medic Supply × Aurion Studio</span>
+      <span class="header-tag">Plano Aurion — R$ 7.000/mês</span>
+      <span class="header-tag">Versão 1.0 · Maio 2026</span>
+    </div>
+
+    <div class="hero-divider"></div>
+  </header>
+
+
+  <!-- ══ SEÇÃO 01 ══ -->
+  <div class="section-label reveal">
+    <span class="section-num"><span>01</span></span>
+    <h2>Contexto &amp; Escopo Acordado</h2>
+    <span class="section-line"></span>
+  </div>
+
+  <div class="intro-card glass reveal">
+    <p>A partir deste onboarding, a <strong>Aurion Studio</strong> assume a gestão estratégica e operacional de <strong>tráfego pago</strong> da Medic Supply — Google Ads e Meta Ads — com foco exclusivo em geração de <strong>leads qualificados e mensuração real de receita</strong>.</p>
+    <p>O escopo contempla: estruturação de campanhas por cluster de SKU (Oncologia, Neurologia, Metabólico), rastreamento ponta a ponta via RD Station CRM, landing pages de pré-qualificação e relatório mensal de ROAS real.</p>
+    <p style="color:var(--muted);font-size:13px;font-weight:300;">O investimento em mídia (Google/Meta Ads) é pago diretamente pela Medic Supply às plataformas, separado do fee de gestão Aurion.</p>
+  </div>
+
+
+  <!-- ══ SEÇÃO 02 ══ -->
+  <div class="section-label reveal">
+    <span class="section-num"><span>02</span></span>
+    <h2>Acessos &amp; Permissões Necessárias</h2>
+    <span class="section-line"></span>
+  </div>
+
+  <p style="color:var(--muted);font-size:13.5px;font-weight:300;margin-bottom:22px;" class="reveal">
+    Todos os itens abaixo devem ser fornecidos <strong style="color:var(--warn);font-weight:500;">antes do kickoff</strong>. Clique em qualquer card para preencher as credenciais de acesso.
+  </p>
+
+  <div class="access-progress glass reveal">
+    <span class="progress-text">Acessos preenchidos &nbsp;<span class="progress-count" id="prog-text">0 / 12</span></span>
+    <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+  </div>
+
+  <!-- Google Ecosystem -->
+  <div class="access-group reveal">
+    <div class="access-group-title">Google Ecosystem</div>
+    <div class="access-cards">
+
+      <div class="access-card glass" data-cred-id="google-ads">
+        <div class="card-main">
+          <div class="access-icon" style="background:rgba(66,133,244,.09);">🔵</div>
+          <div class="access-body">
+            <div class="access-name">Google Ads</div>
+            <div class="access-detail">Acesso de <code>Administrador</code> ou convite via MCC Aurion Studio · ID da conta necessário</div>
+          </div>
+          <div class="card-right">
+            <span class="access-status status-required"><span class="status-dot"></span>Obrigatório</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="access-card glass" data-cred-id="ga4">
+        <div class="card-main">
+          <div class="access-icon" style="background:rgba(251,188,4,.09);">📊</div>
+          <div class="access-body">
+            <div class="access-name">Google Analytics 4 (GA4)</div>
+            <div class="access-detail">Acesso de <code>Editor</code> na propriedade GA4 vinculada ao site</div>
+          </div>
+          <div class="card-right">
+            <span class="access-status status-required"><span class="status-dot"></span>Obrigatório</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="access-card glass" data-cred-id="gtm">
+        <div class="card-main">
+          <div class="access-icon" style="background:rgba(52,168,83,.09);">🏷️</div>
+          <div class="access-body">
+            <div class="access-name">Google Tag Manager (GTM)</div>
+            <div class="access-detail">Acesso de <code>Publicador</code> no container do site. Se não existir, será criado pela Aurion.</div>
+          </div>
+          <div class="card-right">
+            <span class="access-status status-pending"><span class="status-dot"></span>Verificar</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="access-card glass" data-cred-id="gsc">
+        <div class="card-main">
+          <div class="access-icon" style="background:rgba(66,133,244,.09);">🔍</div>
+          <div class="access-body">
+            <div class="access-name">Google Search Console</div>
+            <div class="access-detail">Acesso de <code>Proprietário Delegado</code> para análise de termos orgânicos e apoio de campanhas</div>
+          </div>
+          <div class="card-right">
+            <span class="access-status status-pending"><span class="status-dot"></span>Verificar</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Meta Ecosystem -->
+  <div class="access-group reveal">
+    <div class="access-group-title">Meta Ecosystem</div>
+    <div class="access-cards">
+
+      <div class="access-card glass" data-cred-id="meta-bm">
+        <div class="card-main">
+          <div class="access-icon" style="background:rgba(24,119,242,.09);">🔷</div>
+          <div class="access-body">
+            <div class="access-name">Meta Business Manager</div>
+            <div class="access-detail">Adicionar a Aurion Studio como <code>Parceiro</code> no Business Manager. ID do BM necessário.</div>
+          </div>
+          <div class="card-right">
+            <span class="access-status status-required"><span class="status-dot"></span>Obrigatório</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="access-card glass" data-cred-id="meta-ads">
+        <div class="card-main">
+          <div class="access-icon" style="background:rgba(24,119,242,.09);">📣</div>
+          <div class="access-body">
+            <div class="access-name">Meta Ads Manager</div>
+            <div class="access-detail">Acesso de <code>Anunciante</code> na conta de anúncios vinculada ao BM</div>
+          </div>
+          <div class="card-right">
+            <span class="access-status status-required"><span class="status-dot"></span>Obrigatório</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="access-card glass" data-cred-id="instagram">
+        <div class="card-main">
+          <div class="access-icon" style="background:rgba(193,53,132,.09);">📷</div>
+          <div class="access-body">
+            <div class="access-name">Instagram Business</div>
+            <div class="access-detail">Conta vinculada ao Business Manager com acesso <code>Editor de Conteúdo</code></div>
+          </div>
+          <div class="card-right">
+            <span class="access-status status-required"><span class="status-dot"></span>Obrigatório</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="access-card glass" data-cred-id="meta-pixel">
+        <div class="card-main">
+          <div class="access-icon" style="background:rgba(24,119,242,.09);">📡</div>
+          <div class="access-body">
+            <div class="access-name">Meta Pixel + Conversions API (CAPI)</div>
+            <div class="access-detail">Acesso ao Events Manager para configuração do CAPI. Integrado via RD Station.</div>
+          </div>
+          <div class="card-right">
+            <span class="access-status status-required"><span class="status-dot"></span>Obrigatório</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CRM, Site & Ferramentas -->
+  <div class="access-group reveal">
+    <div class="access-group-title">CRM, Site &amp; Ferramentas</div>
+    <div class="access-cards">
+
+      <div class="access-card glass" data-cred-id="rd-station">
+        <div class="card-main">
+          <div class="access-icon" style="background:rgba(0,168,108,.09);">🟢</div>
+          <div class="access-body">
+            <div class="access-name">RD Station CRM</div>
+            <div class="access-detail">Acesso <code>Administrador</code> para pipelines, campos customizados, automações e integração com Ads. Incluir e-mail Aurion como usuário.</div>
+          </div>
+          <div class="card-right">
+            <span class="access-status status-required"><span class="status-dot"></span>Obrigatório</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="access-card glass" data-cred-id="cms">
+        <div class="card-main">
+          <div class="access-icon" style="background:rgba(255,255,255,.03);">🌐</div>
+          <div class="access-body">
+            <div class="access-name">Site / CMS (WordPress, Webflow ou outro)</div>
+            <div class="access-detail">Acesso de <code>Administrador</code> para instalação do GTM e criação/edição das Landing Pages</div>
+          </div>
+          <div class="card-right">
+            <span class="access-status status-required"><span class="status-dot"></span>Obrigatório</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="access-card glass" data-cred-id="whatsapp">
+        <div class="card-main">
+          <div class="access-icon" style="background:rgba(37,211,102,.09);">💬</div>
+          <div class="access-body">
+            <div class="access-name">WhatsApp Business API (Cloud API)</div>
+            <div class="access-detail">Número conectado ao RD Station para leads das LPs e automações de triagem</div>
+          </div>
+          <div class="card-right">
+            <span class="access-status status-pending"><span class="status-dot"></span>Verificar</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="access-card glass" data-cred-id="dns">
+        <div class="card-main">
+          <div class="access-icon" style="background:rgba(255,255,255,.03);">🔗</div>
+          <div class="access-body">
+            <div class="access-name">Domínio / DNS</div>
+            <div class="access-detail">Acesso para subdomínios e configuração de <code>verificação de domínio Meta</code></div>
+          </div>
+          <div class="card-right">
+            <span class="access-status status-pending"><span class="status-dot"></span>Verificar</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="alert alert-warn reveal">
+    <div class="alert-icon">⚠️</div>
+    <div class="alert-text">
+      <strong>Atenção LGPD:</strong> Nunca incluir dados sensíveis de saúde (diagnóstico, CRM médico, prontuário) em parâmetros de URL ou campos rastreados pelas plataformas. Coletar o mínimo necessário e garantir política de privacidade atualizada nas LPs.
+    </div>
+  </div>
+
+  <!-- ══ BOTÃO DE ENVIO ══ -->
+  <div class="send-block glass reveal" id="send-block">
+    <div>
+      <div class="send-title">Acessos prontos? Envie para a Aurion Studio</div>
+      <div class="send-sub">Preencha todas as credenciais acima e clique no botão abaixo.<br>Nossa equipe receberá um e-mail seguro com todas as informações.</div>
+    </div>
+    <button class="send-btn" id="send-btn">Enviar Acessos para Aurion Studio</button>
+    <div class="send-status" id="send-status"></div>
+  </div>
+
+
+  <!-- ══ SEÇÃO 03 ══ -->
+  <div class="section-label reveal">
+    <span class="section-num"><span>03</span></span>
+    <h2>Estrutura do RD Station CRM</h2>
+    <span class="section-line"></span>
+  </div>
+
+  <div class="intro-card glass reveal" style="margin-bottom:24px;">
+    <p>O RD Station será o <strong>centro de verdade da operação</strong>. A mídia deixa de ser otimizada para formulário e passa a ser otimizada para <strong>pagamento confirmado (Won)</strong> — o sinal que enviamos de volta ao Google e Meta.</p>
+  </div>
+
+  <div class="checklist reveal">
+    <div class="check-item glass">
+      <div class="check-box"></div>
+      <div>
+        <div class="check-text"><strong>Pipeline B2C — Pedidos (Paciente/Familiar)</strong></div>
+        <div class="check-sub">Triagem → Docs/Prescrição → Cotação → Cotação Enviada → Pagamento → PAGO (Won) → Entrega → Recompra</div>
+      </div>
+    </div>
+    <div class="check-item glass">
+      <div class="check-box"></div>
+      <div>
+        <div class="check-text"><strong>Pipeline B2B — Parcerias (Médicos/Clínicas/Hospitais)</strong></div>
+        <div class="check-sub">Cadastro B2B → Diagnóstico → Proposta → Acordo Ativo → Pedidos Recorrentes → Retenção</div>
+      </div>
+    </div>
+    <div class="check-item glass">
+      <div class="check-box"></div>
+      <div>
+        <div class="check-text"><strong>Campos obrigatórios em todos os leads</strong></div>
+        <div class="check-sub">Tipo (Paciente/Médico/Clínica) · Prescrição (Sim/Não) · SKU/Medicamento · Urgência · Origem rastreada (UTMs) · Origem declarada</div>
+      </div>
+    </div>
+    <div class="check-item glass">
+      <div class="check-box"></div>
+      <div>
+        <div class="check-text"><strong>Campo Valor obrigatório no stage "PAGO (Won)"</strong></div>
+        <div class="check-sub">Sem valor registrado = ROAS não calculado. Esse campo alimenta Google e Meta via integração offline.</div>
+      </div>
+    </div>
+    <div class="check-item glass">
+      <div class="check-box"></div>
+      <div>
+        <div class="check-text"><strong>Integração RD Station → Google Ads (Conversões Offline)</strong></div>
+        <div class="check-sub">Exportação semanal de Won com gclid → importação no Google Ads para treinar o algoritmo com compradores reais</div>
+      </div>
+    </div>
+    <div class="check-item glass">
+      <div class="check-box"></div>
+      <div>
+        <div class="check-text"><strong>Integração RD Station → Meta Conversions API (CAPI)</strong></div>
+        <div class="check-sub">Trigger no stage Won → evento "Purchase" enviado à Meta com valor do pedido. Contorna bloqueio de cookies iOS.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══ SEÇÃO 04 ══ -->
+  <div class="section-label reveal">
+    <span class="section-num"><span>04</span></span>
+    <h2>Cronograma de Execução — Primeiras 4 Semanas</h2>
+    <span class="section-line"></span>
+  </div>
+
+  <div class="timeline reveal">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <span class="tl-week">Semana 1 · Setup &amp; Fundação</span>
+      <div class="tl-title">Rastreamento + CRM</div>
+      <ul class="tl-tasks">
+        <li class="tl-task">Recebimento e validação de todos os acessos listados na Seção 02</li>
+        <li class="tl-task">Instalação e configuração do Google Tag Manager no site</li>
+        <li class="tl-task">Configuração de eventos Google Ads: submit_quiz (primária) + pageview de obrigado</li>
+        <li class="tl-task">Meta Pixel revisado + CAPI configurado via RD Station</li>
+        <li class="tl-task">RD Station: 2 pipelines + campos obrigatórios + automações básicas</li>
+        <li class="tl-task">Kickoff call (60 min) para alinhamento de SKUs prioritários, SLAs e metas</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <span class="tl-week">Semana 2 · Landing Pages &amp; Campanhas</span>
+      <div class="tl-title">LPs + Estrutura Inicial de Ads</div>
+      <ul class="tl-tasks">
+        <li class="tl-task">LP B2C com quiz de pré-qualificação (6 perguntas) + integração RD Station</li>
+        <li class="tl-task">LP B2B com formulário de parcerias + canal dedicado</li>
+        <li class="tl-task">VSL 1: roteiro + produção (até 30s) para topo de funil</li>
+        <li class="tl-task">Estrutura Google Ads: campanhas por cluster (Oncologia, Neurologia, Metabólico)</li>
+        <li class="tl-task">Listas de negativas iniciais (termos informacionais, concorrência indesejada)</li>
+        <li class="tl-task">Meta Ads: públicos e remarketing (visitantes LP + iniciadores de quiz)</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <span class="tl-week">Semana 3 · Go-Live &amp; Primeiras Otimizações</span>
+      <div class="tl-title">Lançamento + CRO Inicial</div>
+      <ul class="tl-tasks">
+        <li class="tl-task">Go-live das campanhas Google Search (alta intenção) e Meta (VSL + remarketing)</li>
+        <li class="tl-task">Monitoramento diário: taxa de envio do quiz, CPL por cluster, qualidade dos leads</li>
+        <li class="tl-task">CRO: ajustes no quiz (ordem de perguntas, copy do CTA, prova social)</li>
+        <li class="tl-task">Blog: implementação de CTAs padrão com link para LPs</li>
+        <li class="tl-task">Validação do fluxo de triagem no RD Station com equipe comercial</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <span class="tl-week">Semana 4 · Relatório &amp; Planejamento Mês 2</span>
+      <div class="tl-title">Análise + Próximos Passos</div>
+      <ul class="tl-tasks">
+        <li class="tl-task">Relatório Aurion Mês 1: funil completo (Visitas → Lead → Qualificados → Pagos)</li>
+        <li class="tl-task">Primeira leitura de ROAS real (parcial) com dados Won do RD Station</li>
+        <li class="tl-task">Plano de testes do Mês 2: novos criativos, testes A/B de quiz, expansão de clusters</li>
+        <li class="tl-task">VSL 2: briefing baseado nos dados de performance da semana 3</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- ══ SEÇÃO 05 ══ -->
+  <div class="section-label reveal">
+    <span class="section-num"><span>05</span></span>
+    <h2>KPIs &amp; Metas — Primeiros 90 Dias</h2>
+    <span class="section-line"></span>
+  </div>
+
+  <div class="kpi-grid reveal">
+    <div class="kpi-card glass">
+      <div class="kpi-label">Custo por Lead</div>
+      <div class="kpi-value kpi-tbd">A Calibrar</div>
+      <div class="kpi-unit">Sem histórico prévio — CPL definido após sprints de teste</div>
+      <div class="kpi-badge">Em Descoberta</div>
+    </div>
+    <div class="kpi-card glass">
+      <div class="kpi-label">Taxa de Qualificação</div>
+      <div class="kpi-value">15–20%</div>
+      <div class="kpi-unit">Lead → Oportunidade no CRM</div>
+    </div>
+    <div class="kpi-card glass">
+      <div class="kpi-label">Leads B2B</div>
+      <div class="kpi-value">50+</div>
+      <div class="kpi-unit">Médicos/clínicas/mês</div>
+    </div>
+    <div class="kpi-card glass">
+      <div class="kpi-label">ROAS Esperado</div>
+      <div class="kpi-value">4× – 6×</div>
+      <div class="kpi-unit">Retorno sobre mídia (mês 3)</div>
+    </div>
+    <div class="kpi-card glass">
+      <div class="kpi-label">Tempo de Resposta</div>
+      <div class="kpi-value">&lt; 5 min</div>
+      <div class="kpi-unit">SLA via automação WhatsApp</div>
+    </div>
+    <div class="kpi-card glass">
+      <div class="kpi-label">Crescimento MoM</div>
+      <div class="kpi-value">+20%</div>
+      <div class="kpi-unit">Leads qualificados/mês</div>
+    </div>
+  </div>
+
+
+  <!-- ══ SEÇÃO 06 ══ -->
+  <div class="section-label reveal">
+    <span class="section-num"><span>06</span></span>
+    <h2>Próximos Passos Imediatos</h2>
+    <span class="section-line"></span>
+  </div>
+
+  <div class="checklist reveal">
+    <div class="check-item glass">
+      <div class="check-box"></div>
+      <div>
+        <div class="check-text"><strong>1. Envio dos acessos</strong> — Prazo: até 48h após assinatura</div>
+        <div class="check-sub">Todos os itens "Obrigatório" da Seção 02. Enviar para info@aurionstudio.es</div>
+      </div>
+    </div>
+    <div class="check-item glass">
+      <div class="check-box"></div>
+      <div>
+        <div class="check-text"><strong>2. Assinatura do contrato de prestação de serviços</strong></div>
+        <div class="check-sub">Contrato enviado separadamente via DocuSign ou similar. Necessário para início do setup.</div>
+      </div>
+    </div>
+    <div class="check-item glass">
+      <div class="check-box"></div>
+      <div>
+        <div class="check-text"><strong>3. Pagamento da Taxa de Implantação — R$ 5.000</strong></div>
+        <div class="check-sub">Setup de pixels, GTM, RD Station, LPs, estrutura inicial de campanhas e modelo de relatório</div>
+      </div>
+    </div>
+    <div class="check-item glass">
+      <div class="check-box"></div>
+      <div>
+        <div class="check-text"><strong>4. Kickoff call (60 min)</strong> — Após confirmação dos itens acima</div>
+        <div class="check-sub">Mapeamento de SKUs prioritários, SLAs da equipe comercial, metas e aprovação dos quizzes B2C e B2B</div>
+      </div>
+    </div>
+    <div class="check-item glass">
+      <div class="check-box"></div>
+      <div>
+        <div class="check-text"><strong>5. Definir verba de mídia mensal e método de pagamento</strong></div>
+        <div class="check-sub">Recomendado: R$ 4.000–6.000/mês (Google + Meta) pago diretamente pela Medic Supply. Confirmar responsável financeiro.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+
+  <!-- ══ PAINEL DE ACESSOS ══ -->
+  <div class="section-label reveal">
+    <span class="section-num"><span>⚑</span></span>
+    <h2>Painel de Acessos — Aurion Studio</h2>
+    <span class="section-line"></span>
+  </div>
+
+  <div class="glass reveal" id="creds-summary-card" style="overflow:hidden;">
+    <div class="creds-summary-header" id="creds-toggle-btn" role="button" tabindex="0" aria-expanded="false">
+      <div>
+        <div class="summary-title">Resumo de credenciais preenchidas</div>
+        <div class="summary-sub">Clique para visualizar todos os acessos salvos neste documento</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <span class="summary-count-badge empty" id="summary-badge">0 / 12</span>
+        <svg id="summary-chevron" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--muted);transition:transform .42s cubic-bezier(.16,1,.3,1),color .2s;flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+    <div id="creds-table-wrap" style="max-height:0;overflow:hidden;transition:max-height .55s cubic-bezier(.16,1,.3,1)">
+
+      <!-- ── PIN GATE ── -->
+      <div class="pin-gate" id="pin-gate">
+        <div class="pin-gate-inner">
+          <div class="pin-lock-wrap">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div class="pin-title">Acesso Restrito — Aurion Studio</div>
+          <p class="pin-sub">Este painel contém as credenciais preenchidas pelo cliente.<br>Exclusivo para uso interno da equipe Aurion Studio.</p>
+          <div class="pin-row">
+            <input class="pin-input" type="password" id="pin-input" maxlength="30" placeholder="Código de acesso" autocomplete="off">
+            <button class="pin-submit" id="pin-submit">Desbloquear</button>
+          </div>
+          <div class="pin-error" id="pin-error"></div>
+        </div>
+      </div>
+
+      <!-- ── CREDENTIALS TABLE (hidden until PIN) ── -->
+      <div class="creds-inner" id="creds-data" style="display:none;">
+        <div class="pin-unlocked-note" id="pin-unlocked-note">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Sessão autenticada
+        </div>
+        <table class="creds-table">
+          <thead>
+            <tr>
+              <th>Ferramenta</th>
+              <th>Login / E-mail</th>
+              <th>Senha</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="creds-tbody"></tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══ CONTATO ══ -->
+  <div class="contact-block glass reveal">
+    <p class="contact-label">Dúvidas ou ajustes neste documento?</p>
+    <p class="contact-main">
+      <a href="mailto:info@aurionstudio.es">info@aurionstudio.es</a>
+      &nbsp;·&nbsp;
+      <a href="tel:+5511999605783">+55 11 99960-5783</a>
+    </p>
+    <p class="contact-site">aurionstudio.es</p>
+  </div>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="reveal">
+    <div class="footer-logo" aria-label="Aurion Studio">
+      <!-- Same wordmark SVG, prefixed ftr- -->
+      <svg viewBox="0 0 2600 900" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="ftr-aurora" x1="0%" x2="100%" y1="0%" y2="100%">
+            <stop offset="0%"   stop-color="#14F1D9"/>
+            <stop offset="35%"  stop-color="#3AA6FF"/>
+            <stop offset="70%"  stop-color="#8B5CF6"/>
+            <stop offset="100%" stop-color="#EC4899"/>
+          </linearGradient>
+          <filter id="ftr-glow" height="220%" width="220%" x="-60%" y="-60%">
+            <feGaussianBlur result="b" stdDeviation="14"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <text fill="#EAF1F8" font-family="Montserrat, Inter, Helvetica, Arial, sans-serif" font-size="260" letter-spacing="2" x="160" y="600">AURI</text>
+        <circle cx="910.3" cy="457" fill="none" filter="url(#ftr-glow)" r="118.3" stroke="url(#ftr-aurora)" stroke-width="41.6"/>
+        <circle cx="910.3" cy="457" fill="none" r="94.9" stroke="#EAF1F8" stroke-width="23.4"/>
+        <text fill="#EAF1F8" font-family="Montserrat, Inter, Helvetica, Arial, sans-serif" font-size="260" letter-spacing="2" x="1052.6" y="600">N STUDIO</text>
+      </svg>
+    </div>
+    <div class="footer-meta">
+      Documento Confidencial · Medic Supply × Aurion Studio<br>
+      Maio 2026 · Versão 1.0
+    </div>
+  </footer>
+
+</div><!-- /wrapper -->
+
+<script>
+/* ─── PROGRESS BAR ─── */
+const bar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+  bar.style.width = Math.min(pct * 100, 100) + '%';
+}, { passive: true });
+
+/* ─── NAV COMPACT ─── */
+const mainNav = document.getElementById('main-nav');
+window.addEventListener('scroll', () => { mainNav.classList.toggle('scrolled', window.scrollY > 50); }, { passive: true });
+
+/* ─── CURSOR GLOW ─── */
+const glow = document.getElementById('cursor-glow');
+let gx = 0, gy = 0, cx = 0, cy = 0;
+document.addEventListener('mousemove', e => { gx = e.clientX; gy = e.clientY; });
+(function animGlow() {
+  cx += (gx - cx) * .07; cy += (gy - cy) * .07;
+  glow.style.left = cx + 'px'; glow.style.top = cy + 'px';
+  requestAnimationFrame(animGlow);
+})();
+
+/* ─── SCROLL REVEAL ─── */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+}, { threshold: .07, rootMargin: '0px 0px -44px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+document.querySelectorAll('.access-cards,.checklist,.kpi-grid,.tl-tasks').forEach(group => {
+  const kids = group.querySelectorAll('.access-card,.check-item,.kpi-card,.tl-task');
+  kids.forEach((c, i) => {
+    c.style.opacity = '0'; c.style.transform = 'translateY(18px)';
+    c.style.transition = `opacity .55s cubic-bezier(.16,1,.3,1) ${i*55}ms,transform .55s cubic-bezier(.16,1,.3,1) ${i*55}ms,border-color .35s,background .35s,box-shadow .4s,transform .4s cubic-bezier(.16,1,.3,1)`;
+  });
+  new IntersectionObserver(([e]) => { if (e.isIntersecting) kids.forEach(c => { c.style.opacity = '1'; c.style.transform = 'translateY(0)'; }); }, { threshold: .05 }).observe(group);
+});
+
+/* ─── CREDENTIALS ─── */
+const LS_PFX  = 'aurion_cred_';
+const TOTAL   = 12;
+const NAMES   = {
+  'google-ads':'Google Ads','ga4':'Google Analytics 4','gtm':'Google Tag Manager',
+  'gsc':'Google Search Console','meta-bm':'Meta Business Manager','meta-ads':'Meta Ads Manager',
+  'instagram':'Instagram Business','meta-pixel':'Meta Pixel + CAPI','rd-station':'RD Station CRM',
+  'cms':'Site / CMS','whatsapp':'WhatsApp Business API','dns':'Domínio / DNS'
+};
+const CHEV = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`;
+const EYE  = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+const EYEX = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+
+function getSaved(id) { try { return JSON.parse(localStorage.getItem(LS_PFX+id)) || null; } catch(e) { return null; } }
+function setSaved(id,d) { localStorage.setItem(LS_PFX+id, JSON.stringify(d)); }
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function countFilled() {
+  return Array.from(document.querySelectorAll('[data-cred-id]')).filter(c => getSaved(c.dataset.credId)).length;
+}
+function updateProgress() {
+  const n = countFilled(); const pct = Math.round(n/TOTAL*100);
+  document.getElementById('prog-text').textContent = n + ' / ' + TOTAL;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  const b = document.getElementById('summary-badge');
+  b.textContent = n + ' / ' + TOTAL;
+  b.className = 'summary-count-badge ' + (n===0?'empty':n<TOTAL?'partial':'full');
+}
+function buildSummaryTable() {
+  const tbody = document.getElementById('creds-tbody'); if (!tbody) return;
+  tbody.innerHTML = '';
+  document.querySelectorAll('[data-cred-id]').forEach(card => {
+    const id = card.dataset.credId; const name = NAMES[id]||id; const data = getSaved(id);
+    const tr = document.createElement('tr');
+    if (data) {
+      tr.innerHTML = `<td class="tool-name-cell">${esc(name)}</td>
+        <td>${data.login?`<code class="cred-code">${esc(data.login)}</code>`:'<span style="color:var(--muted)">—</span>'}</td>
+        <td><span class="cred-pass-display" data-val="${esc(data.senha||'')}">••••••••</span>${data.senha?`<button class="cred-reveal-btn" onclick="revealPass(this)">Ver</button>`:''}</td>
+        <td><span class="access-status status-done" style="display:inline-flex;font-size:8px;padding:3px 9px;"><span class="status-dot"></span>Preenchido</span></td>`;
+    } else {
+      tr.innerHTML = `<td class="tool-name-cell" style="color:var(--muted)">${esc(name)}</td><td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td><td><span class="access-status status-pending" style="display:inline-flex;font-size:8px;padding:3px 9px;"><span class="status-dot"></span>Pendente</span></td>`;
+    }
+    tbody.appendChild(tr);
+  });
+}
+window.revealPass = function(btn) {
+  const span = btn.previousElementSibling; const h = span.textContent==='••••••••';
+  span.textContent = h ? span.dataset.val : '••••••••'; btn.textContent = h ? 'Ocultar' : 'Ver';
+};
+
+function initCredPanels() {
+  document.querySelectorAll('[data-cred-id]').forEach(card => {
+    const id = card.dataset.credId;
+    const cr = card.querySelector('.card-right');
+
+    const tb = document.createElement('button'); tb.className='cred-toggle-btn'; tb.innerHTML=CHEV; tb.title='Preencher credenciais'; cr.appendChild(tb);
+
+    const panel = document.createElement('div'); panel.className='cred-panel'; panel.id='cred-'+id;
+    panel.style.maxHeight='0px';
+    panel.innerHTML=`<div class="cred-sep"></div>
+      <div class="cred-row">
+        <div class="cred-field"><label class="cred-label" for="login-${id}">Login / E-mail</label><input class="cred-input" type="text" id="login-${id}" placeholder="login@empresa.com" autocomplete="off" spellcheck="false"></div>
+        <div class="cred-field"><label class="cred-label" for="senha-${id}">Senha</label><div class="cred-pass-wrap"><input class="cred-input" type="password" id="senha-${id}" placeholder="••••••••" autocomplete="new-password"><button class="cred-eye" type="button" tabindex="-1" data-t="senha-${id}">${EYE}</button></div></div>
+      </div>
+      <div class="cred-footer"><button class="cred-save-btn" type="button" data-id="${id}">Salvar acesso</button><span class="cred-saved-tag" id="stag-${id}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Salvo</span></div>`;
+    card.appendChild(panel);
+
+    const saved = getSaved(id);
+    if (saved) {
+      if (saved.login) document.getElementById('login-'+id).value=saved.login;
+      if (saved.senha) document.getElementById('senha-'+id).value=saved.senha;
+      markFilled(card, id);
+    }
+
+    tb.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = !panel.classList.contains('open');
+      if (open) { panel.style.maxHeight=(panel.scrollHeight+180)+'px'; panel.classList.add('open'); tb.classList.add('open'); setTimeout(()=>document.getElementById('login-'+id).focus(),60); }
+      else { panel.style.maxHeight='0px'; panel.classList.remove('open'); tb.classList.remove('open'); }
+    });
+
+    panel.querySelector('.cred-save-btn').addEventListener('click', () => {
+      const login=document.getElementById('login-'+id).value.trim();
+      const senha=document.getElementById('senha-'+id).value;
+      setSaved(id,{login,senha}); markFilled(card,id); flashTag(id); updateProgress(); buildSummaryTable();
+    });
+
+    panel.querySelector('.cred-eye').addEventListener('click', function() {
+      const inp=document.getElementById(this.dataset.t); const show=inp.type==='password';
+      inp.type=show?'text':'password'; this.innerHTML=show?EYEX:EYE; this.style.color=show?'var(--teal)':'';
+    });
+
+    panel.querySelectorAll('.cred-input').forEach(inp => { inp.addEventListener('keydown',e=>{ if(e.key==='Enter') panel.querySelector('.cred-save-btn').click(); }); });
+  });
+}
+function markFilled(card, id) {
+  card.classList.add('cred-filled');
+  const t=document.getElementById('stag-'+id); if(t) t.classList.add('show');
+}
+function flashTag(id) {
+  const t=document.getElementById('stag-'+id); if(!t) return;
+  t.classList.add('show'); t.style.transform='scale(1.2)';
+  setTimeout(()=>{ t.style.transform=''; },280);
+}
+
+function initSummary() {
+  const btn      = document.getElementById('creds-toggle-btn');
+  const wrap     = document.getElementById('creds-table-wrap');
+  const chev     = document.getElementById('summary-chevron');
+  const pinGate  = document.getElementById('pin-gate');
+  const credsData= document.getElementById('creds-data');
+  const pinInput = document.getElementById('pin-input');
+  const pinSubmit= document.getElementById('pin-submit');
+  const pinError = document.getElementById('pin-error');
+  if (!btn) return;
+
+  /* ── PIN configuration ─────────────────────────────────────
+     Altere o valor abaixo para o código de acesso desejado.
+     É case-insensitive (AURION = aurion = Aurion).
+  ─────────────────────────────────────────────────────────── */
+  const SECRET   = 'aurion';
+  const AUTH_KEY = 'aurion_panel_v1';
+
+  function openPanel() {
+    buildSummaryTable();
+    wrap.style.maxHeight = '900px';
+    btn.setAttribute('aria-expanded', 'true');
+    chev.style.transform = 'rotate(180deg)';
+    chev.style.color     = 'var(--teal)';
+    /* Se já autenticado nesta sessão, mostrar tabela direto */
+    if (sessionStorage.getItem(AUTH_KEY) === '1') {
+      pinGate.style.display  = 'none';
+      credsData.style.display = 'block';
+    } else {
+      setTimeout(() => pinInput.focus(), 120);
+    }
+  }
+
+  function closePanel() {
+    wrap.style.maxHeight = '0';
+    btn.setAttribute('aria-expanded', 'false');
+    chev.style.transform = '';
+    chev.style.color     = '';
+  }
+
+  function tryUnlock() {
+    const val = pinInput.value.trim().toLowerCase();
+    if (val === SECRET.toLowerCase()) {
+      sessionStorage.setItem(AUTH_KEY, '1');
+      pinGate.style.display   = 'none';
+      credsData.style.display = 'block';
+      pinError.textContent    = '';
+      /* recalculate height with table visible */
+      wrap.style.maxHeight = '900px';
+    } else {
+      pinError.textContent = 'Código incorreto. Tente novamente.';
+      pinInput.classList.add('pin-wrong');
+      setTimeout(() => { pinInput.classList.remove('pin-wrong'); }, 400);
+      pinInput.value = '';
+      pinInput.focus();
+    }
+  }
+
+  btn.addEventListener('click', () => {
+    btn.getAttribute('aria-expanded') === 'true' ? closePanel() : openPanel();
+  });
+  btn.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); btn.click(); } });
+  pinSubmit.addEventListener('click', tryUnlock);
+  pinInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+
+  /* Se a sessão já estava autenticada ao carregar a página */
+  if (sessionStorage.getItem(AUTH_KEY) === '1') {
+    pinGate.style.display   = 'none';
+    credsData.style.display = 'block';
+  }
+}
+
+/* ─── ENVIO FORMSPREE ─── */
+function initSendButton() {
+  /* ▼▼▼ COLE AQUI O SEU ENDPOINT DO FORMSPREE ▼▼▼ */
+  const FORMSPREE_URL = 'https://formspree.io/f/xkoepwdj';
+  /* ▲▲▲ ─────────────────────────────────────── ▲▲▲ */
+
+  const btn      = document.getElementById('send-btn');
+  const statusEl = document.getElementById('send-status');
+  if (!btn) return;
+
+  btn.addEventListener('click', async () => {
+    const linhas = Object.keys(NAMES).map(id => {
+      const d = getSaved(id);
+      const login = d && d.login ? d.login : '(não preenchido)';
+      const senha = d && d.senha ? d.senha : '(não preenchida)';
+      return `${NAMES[id]}\n  Login: ${login}\n  Senha: ${senha}`;
+    });
+
+    btn.disabled = true;
+    statusEl.className = 'send-status';
+    statusEl.textContent = 'Enviando…';
+
+    try {
+      const res = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          _subject: '[Onboarding] Acessos Medic Supply — ' + new Date().toLocaleDateString('pt-BR'),
+          total_preenchidos: countFilled() + ' de ' + TOTAL,
+          credenciais: linhas.join('\n\n')
+        })
+      });
+
+      if (res.ok) {
+        statusEl.className = 'send-status ok';
+        statusEl.textContent = '✓ Enviado! A equipe Aurion Studio recebeu suas credenciais.';
+        btn.textContent = 'Enviado ✓';
+      } else {
+        throw new Error('server');
+      }
+    } catch {
+      statusEl.className = 'send-status err';
+      statusEl.textContent = 'Erro ao enviar. Tente novamente ou escreva para info@aurionstudio.es';
+      btn.disabled = false;
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => { initCredPanels(); initSummary(); updateProgress(); buildSummaryTable(); initSendButton(); });
+</script>
+</body>
+</html>
