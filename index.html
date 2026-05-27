@@ -917,9 +917,20 @@ footer {
   </div>
 
   <div class="intro-card glass reveal">
-    <p>A partir deste onboarding, a <strong>Aurion Studio</strong> assume a gestão estratégica e operacional de <strong>tráfego pago</strong> da Medic Supply — Google Ads e Meta Ads — com foco exclusivo em geração de <strong>leads qualificados e mensuração real de receita</strong>.</p>
-    <p>O escopo contempla: estruturação de campanhas por cluster de SKU (Oncologia, Neurologia, Metabólico), rastreamento ponta a ponta via RD Station CRM, landing pages de pré-qualificação e relatório mensal de ROAS real.</p>
+    <p>A partir deste onboarding, a <strong>Aurion Studio</strong> assume a gestão estratégica e operacional de <strong>tráfego pago</strong> da Medic Supply — Google Ads e Meta Ads — com foco exclusivo em geração de <strong>leads qualificados e mensuração real de receita</strong>. A auditoria inicial revelou situações críticas que precisam de resolução urgente antes do pleno início das campanhas.</p>
+    <p>O escopo contempla: estruturação de campanhas por cluster de SKU (Oncologia, Neurologia, Metabólico), rastreamento ponta a ponta via RD Station CRM, landing pages de pré-qualificação no subdomínio isolado <strong>ads.medicsupply.com.br</strong> e relatório mensal de ROAS real.</p>
     <p style="color:var(--muted);font-size:13px;font-weight:300;">O investimento em mídia (Google/Meta Ads) é pago diretamente pela Medic Supply às plataformas, separado do fee de gestão Aurion.</p>
+  </div>
+
+  <!-- ALERTA CRÍTICO — issues descobertos na auditoria -->
+  <div class="alert reveal" style="background:rgba(255,90,90,.05);border:1px solid rgba(255,90,90,.22);margin-top:20px;">
+    <div class="alert-icon">🚨</div>
+    <div class="alert-text" style="font-size:13px;">
+      <strong style="color:var(--danger);font-size:13.5px;">Situações Críticas Identificadas na Auditoria Inicial</strong><br><br>
+      <strong style="color:var(--white);">① Google Ads — 3ª conta em risco imediato de nova suspensão:</strong> A Medic Supply acumula 2 suspensões entre 2024–2026 (10 meses de conta inativa). Causa-raiz: as agências anteriores M8K e MktLab criaram campanhas usando nomes comerciais de medicamentos Rx (Augtyro, Tukysa, Mounjaro) sem a certificação LegitScript exigida pelo Google. A conta atual possui <strong style="color:var(--danger);">94 anúncios reprovados</strong> em 5 categorias de violação com os mesmos problemas ainda ativos. Sem ação corretiva imediata, a 3ª suspensão é questão de dias ou semanas.<br><br>
+      <strong style="color:var(--white);">② Meta Ads — Acesso do proprietário perdido:</strong> O titular perdeu acesso ao Meta Business Manager via autenticador (Google Authenticator). É necessário concluir o processo de recuperação antes de qualquer ativação de campanhas no Facebook e Instagram.<br><br>
+      <em style="color:var(--muted);font-size:11.5px;">Essas situações impactam o cronograma inicial. O plano de execução (Seção 04) foi reorganizado para priorizar a resolução dessas pendências antes do go-live das campanhas.</em>
+    </div>
   </div>
 
 
@@ -944,15 +955,15 @@ footer {
     <div class="access-group-title">Google Ecosystem</div>
     <div class="access-cards">
 
-      <div class="access-card glass" data-cred-id="google-ads">
+      <div class="access-card glass" data-cred-id="google-ads" style="border-color:rgba(255,90,90,.2);">
         <div class="card-main">
           <div class="access-icon" style="background:rgba(66,133,244,.09);">🔵</div>
           <div class="access-body">
             <div class="access-name">Google Ads</div>
-            <div class="access-detail">Acesso de <code>Administrador</code> ou convite via MCC Aurion Studio · ID da conta necessário</div>
+            <div class="access-detail">Acesso de <code>Administrador</code> ou convite via MCC Aurion Studio · ID da conta necessário · <span style="color:var(--danger);font-weight:500;">⚠ 3ª conta com 94 anúncios reprovados — risco de suspensão ativa</span></div>
           </div>
           <div class="card-right">
-            <span class="access-status status-required"><span class="status-dot"></span>Obrigatório</span>
+            <span class="access-status status-required"><span class="status-dot"></span>Urgente</span>
           </div>
         </div>
       </div>
@@ -1004,28 +1015,28 @@ footer {
     <div class="access-group-title">Meta Ecosystem</div>
     <div class="access-cards">
 
-      <div class="access-card glass" data-cred-id="meta-bm">
+      <div class="access-card glass" data-cred-id="meta-bm" style="border-color:rgba(255,181,71,.22);">
         <div class="card-main">
           <div class="access-icon" style="background:rgba(24,119,242,.09);">🔷</div>
           <div class="access-body">
             <div class="access-name">Meta Business Manager</div>
-            <div class="access-detail">Adicionar a Aurion Studio como <code>Parceiro</code> no Business Manager. ID do BM necessário.</div>
+            <div class="access-detail">Adicionar a Aurion Studio como <code>Parceiro</code> no Business Manager. ID do BM necessário. <span style="color:var(--warn);font-weight:500;">⚠ Proprietário perdeu acesso via autenticador — recuperação em andamento</span></div>
           </div>
           <div class="card-right">
-            <span class="access-status status-required"><span class="status-dot"></span>Obrigatório</span>
+            <span class="access-status status-pending"><span class="status-dot"></span>Recuperar</span>
           </div>
         </div>
       </div>
 
-      <div class="access-card glass" data-cred-id="meta-ads">
+      <div class="access-card glass" data-cred-id="meta-ads" style="border-color:rgba(255,181,71,.22);">
         <div class="card-main">
           <div class="access-icon" style="background:rgba(24,119,242,.09);">📣</div>
           <div class="access-body">
             <div class="access-name">Meta Ads Manager</div>
-            <div class="access-detail">Acesso de <code>Anunciante</code> na conta de anúncios vinculada ao BM</div>
+            <div class="access-detail">Acesso de <code>Anunciante</code> na conta vinculada ao BM · <span style="color:var(--warn);font-weight:500;">Bloqueado — aguarda recuperação de acesso do proprietário (autenticador perdido)</span></div>
           </div>
           <div class="card-right">
-            <span class="access-status status-required"><span class="status-dot"></span>Obrigatório</span>
+            <span class="access-status status-pending"><span class="status-dot"></span>Bloqueado</span>
           </div>
         </div>
       </div>
@@ -1251,52 +1262,78 @@ footer {
   <div class="timeline reveal">
     <div class="tl-item">
       <div class="tl-dot"></div>
-      <span class="tl-week">Semana 1 · Setup &amp; Fundação</span>
-      <div class="tl-title">Rastreamento + CRM + SDR</div>
+      <span class="tl-week">Semana 1 · Compliance Emergencial &amp; Fundação</span>
+      <div class="tl-title">Correção Urgente + Setup Base</div>
       <ul class="tl-tasks">
+        <li class="tl-task" style="border-color:rgba(255,90,90,.25);background:rgba(255,90,90,.04);"><strong style="color:var(--danger);">⚠ URGENTE (24h) —</strong> Remover pop-up "30% OFF" da homepage · responsabilidade da equipe dev da Medic Supply · proibido pela ANVISA, CFM e políticas Google/Meta</li>
+        <li class="tl-task">Pausar os 94 anúncios reprovados e corrigir as 2 URLs com erro na conta Google Ads atual (3ª conta) — Aurion Studio · prazo 48h</li>
+        <li class="tl-task">Iniciar processo de certificação <strong>LegitScript</strong> em my.legitscript.com — pré-requisito obrigatório para reativação segura do Google Ads · prazo de aprovação: 3 a 6 semanas</li>
+        <li class="tl-task"><strong>NÃO criar nova conta Google Ads</strong> — a 3ª conta deve ser corrigida, nunca abandonada. Uma 4ª conta seria suspensa automaticamente pelo Google vinculando ao mesmo domínio/CNPJ</li>
+        <li class="tl-task">Iniciar recuperação de acesso Meta Ads — proprietário perdeu acesso via Google Authenticator · processo via Central de Ajuda Meta Business (business.facebook.com/help) com documentos do titular</li>
         <li class="tl-task">Recebimento e validação de todos os acessos listados na Seção 02</li>
         <li class="tl-task">Instalação e configuração do Google Tag Manager no site</li>
-        <li class="tl-task">Configuração de eventos Google Ads: submit_quiz (primária) + pageview de obrigado</li>
-        <li class="tl-task">Meta Pixel revisado + CAPI configurado via RD Station</li>
-        <li class="tl-task">RD Station: 2 pipelines + campos obrigatórios + automações básicas</li>
-        <li class="tl-task">Instalação e configuração do <strong>SDR GatorClaw</strong> — agente de atendimento e qualificação automática de leads integrado ao RD Station (taxa única de implantação: R$ 1.500 · infraestrutura VPS HostGator + créditos de API LLM pagos diretamente pelo cliente: ~R$ 30–100/mês)</li>
         <li class="tl-task">Kickoff call (60 min) para alinhamento de SKUs prioritários, SLAs e metas</li>
       </ul>
     </div>
     <div class="tl-item">
       <div class="tl-dot"></div>
-      <span class="tl-week">Semana 2 · Landing Pages &amp; Campanhas</span>
-      <div class="tl-title">LPs + Estrutura Inicial de Ads</div>
+      <span class="tl-week">Semana 2 · Estrutura &amp; Recuperação de Acessos</span>
+      <div class="tl-title">Subdomínio Isolado + CRM + Meta</div>
       <ul class="tl-tasks">
-        <li class="tl-task">LP B2C com quiz de pré-qualificação (6 perguntas) + integração RD Station</li>
-        <li class="tl-task">LP B2B com formulário de parcerias + canal dedicado</li>
-        <li class="tl-task">VSL 1: roteiro + produção (até 30s) para topo de funil</li>
-        <li class="tl-task">Estrutura Google Ads: campanhas por cluster (Oncologia, Neurologia, Metabólico)</li>
-        <li class="tl-task">Listas de negativas iniciais (termos informacionais, concorrência indesejada)</li>
-        <li class="tl-task">Meta Ads: públicos e remarketing (visitantes LP + iniciadores de quiz)</li>
+        <li class="tl-task">Criar subdomínio isolado <strong>ads.medicsupply.com.br</strong> — sem links para o blog (resolve a detecção dos 18+ nomes de medicamentos Rx pelo crawler do Google)</li>
+        <li class="tl-task">RD Station: 2 pipelines (B2C/B2B) + campos obrigatórios + automações básicas de triagem</li>
+        <li class="tl-task">Iniciar LPs com quiz de pré-qualificação (6 perguntas) no subdomínio isolado</li>
+        <li class="tl-task">LP B2B com formulário de parcerias + canal dedicado no subdomínio isolado</li>
+        <li class="tl-task">Meta Pixel revisado + CAPI configurado via GTM (após recuperação de acesso Meta)</li>
+        <li class="tl-task">Instalação e configuração do <strong>SDR GatorClaw</strong> — agente de atendimento e qualificação automática de leads integrado ao RD Station (taxa única de implantação: R$ 1.500 · infraestrutura VPS HostGator + créditos de API LLM pagos diretamente pelo cliente: ~R$ 30–100/mês)</li>
       </ul>
     </div>
     <div class="tl-item">
       <div class="tl-dot"></div>
-      <span class="tl-week">Semana 3 · Go-Live &amp; Primeiras Otimizações</span>
-      <div class="tl-title">Lançamento + CRO Inicial</div>
+      <span class="tl-week">Semana 3 · Criativos &amp; Compliance Final</span>
+      <div class="tl-title">LPs + Anúncios Reescritos + Meta Ativo</div>
       <ul class="tl-tasks">
-        <li class="tl-task">Go-live das campanhas Google Search (alta intenção) e Meta (VSL + remarketing)</li>
-        <li class="tl-task">Monitoramento diário: taxa de envio do quiz, CPL por cluster, qualidade dos leads</li>
-        <li class="tl-task">CRO: ajustes no quiz (ordem de perguntas, copy do CTA, prova social)</li>
-        <li class="tl-task">Blog: implementação de CTAs padrão com link para LPs</li>
-        <li class="tl-task">Validação do fluxo de triagem no RD Station com equipe comercial</li>
+        <li class="tl-task">Finalizar LPs (B2C + B2B) e publicar no subdomínio ads.medicsupply.com.br</li>
+        <li class="tl-task">VSL 1: roteiro + produção (até 30s) com linguagem de assessoria de serviço — sem nomes de medicamentos, focado em processo e experiência de 34 anos</li>
+        <li class="tl-task">6 criativos iniciais por cluster (Oncologia, Neurologia, Metabólico) — todos em compliance com políticas Healthcare do Google</li>
+        <li class="tl-task">Reescrever todos os anúncios Google Ads com linguagem de assessoria e submeter para revisão do Google</li>
+        <li class="tl-task">Ativar Meta Ads (Facebook/Instagram) como canal primário de leads enquanto Google Ads aguarda aprovação do LegitScript</li>
+        <li class="tl-task">Blog: implementar CTAs com link para o subdomínio isolado (geração de leads orgânicos sem depender de Ads)</li>
       </ul>
     </div>
     <div class="tl-item">
       <div class="tl-dot"></div>
-      <span class="tl-week">Semana 4 · Relatório &amp; Planejamento Mês 2</span>
-      <div class="tl-title">Análise + Próximos Passos</div>
+      <span class="tl-week">Semana 4 · Validação &amp; Baseline</span>
+      <div class="tl-title">Testes + Campanhas Search + Relatório Mês 1</div>
       <ul class="tl-tasks">
-        <li class="tl-task">Relatório Aurion Mês 1: funil completo (Visitas → Lead → Qualificados → Pagos)</li>
-        <li class="tl-task">Primeira leitura de ROAS real (parcial) com dados Won do RD Station</li>
-        <li class="tl-task">Plano de testes do Mês 2: novos criativos, testes A/B de quiz, expansão de clusters</li>
-        <li class="tl-task">VSL 2: briefing baseado nos dados de performance da semana 3</li>
+        <li class="tl-task">Testar LPs, formulários e integração completa com RD Station</li>
+        <li class="tl-task">Configurar campanhas Google Search por cluster com keywords de alta intenção (ex.: "assessoria importação medicamento oncológico") — sem nomes de medicamentos</li>
+        <li class="tl-task">Configurar remarketing para visitantes das LPs no subdomínio isolado</li>
+        <li class="tl-task">Relatório Aurion Mês 1: funil completo (Visitas → Lead → Qualificados → Pagos) + status do processo LegitScript</li>
+        <li class="tl-task">VSL 2: briefing baseado nos dados iniciais de performance Meta Ads</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <span class="tl-week">Mês 2 · Escala — Pós LegitScript</span>
+      <div class="tl-title">Reativação Google Ads + Expansão</div>
+      <ul class="tl-tasks">
+        <li class="tl-task">Após aprovação LegitScript (~3–6 semanas): submeter certificado ao Google e solicitar revisão formal da conta</li>
+        <li class="tl-task">Ativar campanhas Google Ads com orçamento inicial (R$ 3–6k/mês) sobre as LPs do subdomínio isolado</li>
+        <li class="tl-task">CRO quinzenal nas LPs com base em dados reais de conversão Meta + Google</li>
+        <li class="tl-task">Expandir Meta Ads com VSL 2 e públicos de remarketing avançado</li>
+        <li class="tl-task">Monitoramento diário: CPL por cluster, qualidade dos leads no RD Station, validação do fluxo de triagem</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <span class="tl-week">Mês 3+ · Crescimento Sustentável</span>
+      <div class="tl-title">ROAS Real + Expansão de Clusters</div>
+      <ul class="tl-tasks">
+        <li class="tl-task">Otimização por ROAS real (Pago/Won no RD Station → sinal de conversão offline para Google e Meta)</li>
+        <li class="tl-task">Expansão de clusters com mais criativos e novos SKUs prioritários</li>
+        <li class="tl-task">Avaliação LinkedIn Ads para B2B (médicos, clínicas, hospitais)</li>
+        <li class="tl-task">Relatório mensal Aurion com origem do faturamento rastreada até o pagamento</li>
       </ul>
     </div>
   </div>
@@ -1352,38 +1389,66 @@ footer {
   </div>
 
   <div class="checklist reveal">
+    <div class="check-item glass" style="border-color:rgba(255,90,90,.28);background:rgba(255,90,90,.04);">
+      <div class="check-box" style="border-color:rgba(255,90,90,.45);background:rgba(255,90,90,.08);"></div>
+      <div>
+        <div class="check-text"><strong style="color:var(--danger);">⚠ 1. URGENTE (24h) — Remover pop-up "30% OFF" da homepage</strong></div>
+        <div class="check-sub">O pop-up de desconto ativo viola a ANVISA (RDC), o CFM e as políticas do Google e Meta Ads. Deve ser removido pelo desenvolvedor do site em até 24h. É a ação mais urgente — bloqueia qualquer campanha enquanto ativo.</div>
+      </div>
+    </div>
+    <div class="check-item glass" style="border-color:rgba(255,90,90,.28);background:rgba(255,90,90,.04);">
+      <div class="check-box" style="border-color:rgba(255,90,90,.45);background:rgba(255,90,90,.08);"></div>
+      <div>
+        <div class="check-text"><strong style="color:var(--danger);">⚠ 2. NÃO criar nova conta Google Ads</strong></div>
+        <div class="check-sub">A conta atual (3ª) tem 94 anúncios reprovados e risco imediato de suspensão — mas deve ser corrigida, nunca abandonada. Criar uma 4ª conta sem resolver o problema raiz resulta em suspensão automática (Google vincula contas pelo mesmo domínio, CNPJ, IP e titular). Cada conta suspensa piora o histórico do domínio medicsupply.com.br.</div>
+      </div>
+    </div>
+    <div class="check-item glass" style="border-color:rgba(255,181,71,.22);background:rgba(255,181,71,.03);">
+      <div class="check-box" style="border-color:rgba(255,181,71,.38);background:rgba(255,181,71,.07);"></div>
+      <div>
+        <div class="check-text"><strong>3. Iniciar processo de certificação LegitScript <span style="font-weight:300;color:var(--warn)">(Medic Supply + Aurion · Esta semana)</span></strong></div>
+        <div class="check-sub">Pré-requisito obrigatório para o Google liberar anúncios do setor de saúde e para reativar a conta. Portal: <strong style="color:var(--white);">my.legitscript.com</strong>. Custo estimado: ~US$ 975 taxa de aplicação + ~US$ 2.150/ano de monitoramento (≈ R$ 18.000 no 1º ano). Prazo de aprovação: 3 a 6 semanas. A Aurion Studio auxilia no preenchimento e adequação do site.</div>
+      </div>
+    </div>
+    <div class="check-item glass" style="border-color:rgba(255,181,71,.22);background:rgba(255,181,71,.03);">
+      <div class="check-box" style="border-color:rgba(255,181,71,.38);background:rgba(255,181,71,.07);"></div>
+      <div>
+        <div class="check-text"><strong>4. Recuperar acesso Meta Business Manager <span style="font-weight:300;color:var(--warn)">(proprietário · autenticador perdido)</span></strong></div>
+        <div class="check-sub">O titular perdeu acesso via Google Authenticator. Iniciar recuperação em <strong style="color:var(--white);">business.facebook.com/help</strong> com apresentação de documentos do titular da conta. Sem este acesso, Meta Ads (Facebook/Instagram) não pode ser ativado. Canal crítico de geração de leads enquanto Google Ads está em processo de regularização.</div>
+      </div>
+    </div>
     <div class="check-item glass">
       <div class="check-box"></div>
       <div>
-        <div class="check-text"><strong>1. Envio dos acessos</strong> — Prazo: até 48h após assinatura</div>
+        <div class="check-text"><strong>5. Envio dos acessos</strong> — Prazo: até 48h após assinatura</div>
         <div class="check-sub">Todos os itens "Obrigatório" da Seção 02. Enviar para info@aurionstudio.es</div>
       </div>
     </div>
     <div class="check-item glass">
       <div class="check-box"></div>
       <div>
-        <div class="check-text"><strong>2. Assinatura do contrato de prestação de serviços</strong></div>
+        <div class="check-text"><strong>6. Assinatura do contrato de prestação de serviços</strong></div>
         <div class="check-sub">Contrato enviado separadamente via DocuSign ou similar. Necessário para início do setup.</div>
       </div>
     </div>
     <div class="check-item glass">
       <div class="check-box"></div>
       <div>
-        <div class="check-text"><strong>3. Pagamento da Taxa de Implantação — R$ 5.000</strong></div>
+        <div class="check-text"><strong>7. Pagamento da Taxa de Implantação — R$ 5.000</strong></div>
         <div class="check-sub">Setup de pixels, GTM, RD Station, LPs, estrutura inicial de campanhas e modelo de relatório</div>
       </div>
     </div>
     <div class="check-item glass">
       <div class="check-box"></div>
       <div>
-        <div class="check-text"><strong>4. Pagamento da Implantação SDR GatorClaw — R$ 1.500 <span style="font-weight:300;color:var(--muted)">(cobrança única)</span></strong></div>
+        <div class="check-text"><strong>8. Pagamento da Implantação SDR GatorClaw — R$ 1.500 <span style="font-weight:300;color:var(--muted)">(cobrança única)</span></strong></div>
         <div class="check-sub">Instalação, configuração e integração do agente SDR GatorClaw com o RD Station para atendimento e qualificação automática de leads. Manutenção inclusa no Plano Base mensal.</div>
       </div>
     </div>
     <div class="check-item glass" style="border-color:rgba(255,181,71,.18);background:rgba(255,181,71,.03);">
       <div class="check-box" style="border-color:rgba(255,181,71,.35);background:rgba(255,181,71,.06);"></div>
       <div>
-        <div class="check-text"><strong>5. Contratar infraestrutura do SDR GatorClaw <span style="font-weight:300;color:var(--warn)">(custo direto do cliente)</span></strong></div>
+        <div class="check-text"><strong>9. Contratar infraestrutura do SDR GatorClaw <span style="font-weight:300;color:var(--warn)">(custo direto do cliente)</span></strong></div>
         <div class="check-sub" style="line-height:1.85;">
           Para o SDR GatorClaw funcionar, a Medic Supply contrata e paga diretamente duas assinaturas de infraestrutura — <strong style="color:var(--white);">independentes do Plano Base Aurion:</strong><br><br>
           <strong style="color:var(--white);">① VPS HostGator GatorClaw</strong> — servidor cloud com IA pré-instalada:<br>
@@ -1402,14 +1467,14 @@ footer {
     <div class="check-item glass">
       <div class="check-box"></div>
       <div>
-        <div class="check-text"><strong>6. Kickoff call (60 min)</strong> — Após confirmação dos itens acima</div>
+        <div class="check-text"><strong>10. Kickoff call (60 min)</strong> — Após confirmação dos itens acima</div>
         <div class="check-sub">Mapeamento de SKUs prioritários, SLAs da equipe comercial, metas e aprovação dos quizzes B2C e B2B</div>
       </div>
     </div>
     <div class="check-item glass">
       <div class="check-box"></div>
       <div>
-        <div class="check-text"><strong>7. Definir verba de mídia mensal e método de pagamento</strong></div>
+        <div class="check-text"><strong>11. Definir verba de mídia mensal e método de pagamento</strong></div>
         <div class="check-sub">Recomendado: R$ 4.000–6.000/mês (Google + Meta) pago diretamente pela Medic Supply. Confirmar responsável financeiro.</div>
       </div>
     </div>
